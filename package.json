@@ -1,5 +1,5 @@
 {
-  "name": "swaggerize-express",
+  "name": "swaggerize-restify",
   "version": "3.0.3",
   "author": "Trevor Livingston <trlivingston@paypal.com>",
   "description": "Design-first REST services with Swagger and Express.",
