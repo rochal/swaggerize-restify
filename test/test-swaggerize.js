@@ -2,42 +2,42 @@
 
 var test = require('tape'),
     swaggerize = require('../lib'),
-    express = require('express'),
-    bodyParser = require('body-parser'),
+    restify = require('restify'),
     request = require('supertest'),
     path = require('path');
 
 test('swaggerize', function (t) {
 
-    var app = express();
+    var server = restify.createServer();
+    var server2 = restify.createServer();
 
-    var swagger = swaggerize({
+    server.use(restify.bodyParser());
+
+    swaggerize(server, {
         api: require('./fixtures/defs/pets.json'),
         handlers: path.join(__dirname, 'fixtures/handlers')
     });
 
-    app.use(bodyParser.json());
-    app.use(swagger);
 
     t.test('api', function (t) {
         t.plan(5);
 
-        t.ok(app.hasOwnProperty('api'), 'has api property.');
-        t.ok(app.api, 'api is an object.');
+        t.ok(server.hasOwnProperty('api'), 'has api property.');
+        t.ok(server.api, 'api is an object.');
 
-        t.ok(app.hasOwnProperty('setHost'), 'has setHost property.');
-        t.strictEqual(typeof app.setHost, 'function', 'setHost is a function.');
+        t.ok(server.hasOwnProperty('setHost'), 'has setHost property.');
+        t.strictEqual(typeof server.setHost, 'function', 'setHost is a function.');
 
-        app.setHost('localhost:8080');
+        server.setHost('localhost:8080');
 
-        t.strictEqual(app.api.host, 'localhost:8080');
+        t.strictEqual(server.api.host, 'localhost:8080');
     });
 
     t.test('api as path', function (t) {
         t.plan(1);
 
         t.doesNotThrow(function () {
-            swaggerize({
+            swaggerize(server2, {
                 api: path.join(__dirname, './fixtures/defs/pets.json'),
                 handlers: path.join(__dirname, 'fixtures/handlers')
             });
@@ -47,7 +47,7 @@ test('swaggerize', function (t) {
     t.test('docs', function (t) {
         t.plan(2);
 
-        request(app).get('/v1/petstore/api-docs').end(function (error, response) {
+        request(server).get('/v1/petstore/api-docs').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
         });
@@ -56,7 +56,7 @@ test('swaggerize', function (t) {
     t.test('post /pets', function (t) {
         t.plan(3);
 
-        request(app).post('/v1/petstore/pets').send({id: 0, name: 'Cat'}).end(function (error, response) {
+        request(server).post('/v1/petstore/pets').send({id: 0, name: 'Cat'}).end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.name, 'Cat', 'body is correct.');
@@ -66,7 +66,7 @@ test('swaggerize', function (t) {
     t.test('get /pets', function (t) {
         t.plan(3);
 
-        request(app).get('/v1/petstore/pets').end(function (error, response) {
+        request(server).get('/v1/petstore/pets').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.length, 1, 'body is correct.');
@@ -76,7 +76,7 @@ test('swaggerize', function (t) {
     t.test('get /pets/:id', function (t) {
         t.plan(3);
 
-        request(app).get('/v1/petstore/pets/0').end(function (error, response) {
+        request(server).get('/v1/petstore/pets/0').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.name, 'Cat', 'body is correct.');
@@ -86,7 +86,7 @@ test('swaggerize', function (t) {
     t.test('delete /pets', function (t) {
         t.plan(3);
 
-        request(app).delete('/v1/petstore/pets/0').end(function (error, response) {
+        request(server).delete('/v1/petstore/pets/0').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.length, 0, 'body is correct.');
@@ -97,11 +97,12 @@ test('swaggerize', function (t) {
 
 test('input validation', function (t) {
 
-    var app = express();
+    var server = restify.createServer();
 
-    app.use(bodyParser.json());
+    server.use(restify.bodyParser());
+    server.use(restify.queryParser());
 
-    app.use(swaggerize({
+    swaggerize(server, {
         api: require('./fixtures/defs/pets.json'),
         handlers: {
             'pets': {
@@ -117,7 +118,7 @@ test('input validation', function (t) {
                     res.json({
                         id: 0,
                         name: 'Cat',
-                        tags: req.param('tags')
+                        tags: req.query['tags']
                     });
                 },
                 $post: function (req, res) {
@@ -125,12 +126,12 @@ test('input validation', function (t) {
                 }
             }
         }
-    }));
+    });
 
     t.test('good query', function (t) {
         t.plan(3);
 
-        request(app).get('/v1/petstore/pets?tags=kitty,serious').end(function (error, response) {
+        request(server).get('/v1/petstore/pets?tags=kitty&tags=serious').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.tags.length, 2, 'query parsed.');
@@ -140,7 +141,7 @@ test('input validation', function (t) {
     t.test('missing body', function (t) {
         t.plan(2);
 
-        request(app).post('/v1/petstore/pets').send('').end(function (error, response) {
+        request(server).post('/v1/petstore/pets').send('').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 400, '400 status.');
         });
@@ -149,23 +150,23 @@ test('input validation', function (t) {
 });
 
 test('yaml support', function (t) {
-    var app = express();
+    var server = restify.createServer();
 
     t.test('api as yaml', function (t) {
         t.plan(1);
 
         t.doesNotThrow(function () {
-            app.use(swaggerize({
+            swaggerize(server, {
                 api: path.join(__dirname, './fixtures/defs/pets.yaml'),
                 handlers: path.join(__dirname, 'fixtures/handlers')
-            }));
+            });
         });
     });
 
     t.test('get /pets', function (t) {
         t.plan(2);
 
-        request(app).get('/v1/petstore/pets').end(function (error, response) {
+        request(server).get('/v1/petstore/pets').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
         });
