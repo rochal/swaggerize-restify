@@ -1,15 +1,18 @@
 {
   "name": "swaggerize-restify",
-  "version": "3.0.3",
-  "author": "Trevor Livingston <trlivingston@paypal.com>",
-  "description": "Design-first REST services with Swagger and Express.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Adrian Zalewski",
+    "email": "aazalewski@hotmail.com"
+  },
+  "description": "Design-first REST services with Swagger and Restify (forked from the excellent package written by Trevor Livingston: https://github.com/krakenjs/swaggerize-express).",
   "keywords": [
     "swagger",
     "swagger 2.0",
     "swagger-node",
-    "swagger-express",
+    "swagger-restify",
     "swagger-ui",
-    "express",
+    "restify",
     "node",
     "node.js",
     "rest",
@@ -20,9 +23,9 @@
   "main": "./lib/index",
   "repository": {
     "type": "git",
-    "url": "git://github.com/krakenjs/swaggerize-express.git"
+    "url": "git://github.com/bardzusny/swaggerize-restify.git"
   },
-  "bugs": "http://github.com/krakenjs/swaggerize-express/issues",
+  "bugs": "http://github.com/bardzusny/swaggerize-restify/issues",
   "engines": {
     "node": "0.10.x"
   },
@@ -37,13 +40,13 @@
     "swaggerize-builder": "^2.0.0"
   },
   "peerDependencies": {
-    "express": "^4.0.0"
+    "restify": "^2.8.5"
   },
   "devDependencies": {
     "tape": "^2.4.2",
     "istanbul": "^0.2.3",
     "jshint": "^2.4.1",
-    "express": "^4.6.1",
+    "restify": "^2.8.5",
     "supertest": "^0.13.0",
     "body-parser": "^1.7.0"
   },
