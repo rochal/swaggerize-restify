@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bardzusny/swaggerize-restify.svg?branch=master)](https://travis-ci.org/bardzusny/swaggerize-restify)
+
 swaggerize-restify
 ==================
 
