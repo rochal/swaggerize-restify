@@ -1,6 +1,6 @@
 {
   "name": "swaggerize-restify",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": {
     "name": "Adrian Zalewski",
     "email": "aazalewski@hotmail.com"
@@ -30,6 +30,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "async": "^0.9.0",
     "caller": "^0.0.1",
     "core-util-is": "^1.0.1",
     "debuglog": "^1.0.1",
@@ -37,7 +38,7 @@
     "lodash": "^2.4.1",
     "minimist": "^0.2.0",
     "mkdirp": "^0.5.0",
-    "swaggerize-builder": "^2.0.0"
+    "swaggerize-routes": "^1.0.0"
   },
   "peerDependencies": {
     "restify": "^2.8.5"

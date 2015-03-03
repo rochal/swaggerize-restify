@@ -73,9 +73,14 @@ test('swaggerize', function (t) {
     });
 
     t.test('get /pets/:id', function (t) {
-        t.plan(3);
+        t.plan(5);
 
         request(server).get('/v1/petstore/pets/0').end(function (error, response) {
+            t.ok(!error, 'no error.');
+            t.strictEqual(response.statusCode, 403, '403 status.');
+        });
+
+        request(server).get('/v1/petstore/pets/0').set('authorize', 'abcd').end(function (error, response) {
             t.ok(!error, 'no error.');
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.strictEqual(response.body.name, 'Cat', 'body is correct.');
