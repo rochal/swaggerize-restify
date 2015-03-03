@@ -29,7 +29,7 @@ swaggerize(server, {
     handlers: path.resolve('./handlers')
 });
 
-server.listen(8000, function () {
-    server.setHost(server.address().address + ':' + server.address().port);
+server.listen(8000, 'localhost', function () {
+    server.swagger.api.host = server.address().address + ':' + server.address().port;
 });
 ```

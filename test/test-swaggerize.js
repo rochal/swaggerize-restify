@@ -20,17 +20,16 @@ test('swaggerize', function (t) {
 
 
     t.test('api', function (t) {
-        t.plan(5);
+        t.plan(6);
 
-        t.ok(server.hasOwnProperty('api'), 'has api property.');
-        t.ok(server.api, 'api is an object.');
+        t.ok(server.hasOwnProperty('swagger'), 'app has swagger property.');
+        t.ok(server.swagger, 'swagger is an object.');
 
-        t.ok(server.hasOwnProperty('setHost'), 'has setHost property.');
-        t.strictEqual(typeof server.setHost, 'function', 'setHost is a function.');
+        t.ok(server.swagger.hasOwnProperty('api'), 'app.swagger has api property.');
+        t.ok(server.swagger.api, 'app.swagger.api is an object.');
 
-        server.setHost('localhost:8080');
-
-        t.strictEqual(server.api.host, 'localhost:8080');
+        t.ok(server.swagger.hasOwnProperty('routes'), 'app.swagger has routes property.');
+        t.ok(server.swagger.routes, 'app.swagger.routes is an object.');
     });
 
     t.test('api as path', function (t) {

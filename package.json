@@ -1,6 +1,6 @@
 {
   "name": "swaggerize-restify",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "author": {
     "name": "Adrian Zalewski",
     "email": "aazalewski@hotmail.com"
@@ -52,7 +52,7 @@
   "scripts": {
     "test": "tape test/*.js",
     "cover": "istanbul cover tape -- test/*.js",
-    "lint": "jshint -c .jshintrc lib/*.js bin/*.js bin/lib/*.js"
+    "lint": "jshint -c .jshintrc lib/*.js lib/*.js"
   },
   "licenses": [
     {
