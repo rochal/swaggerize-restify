@@ -1,6 +1,6 @@
 {
   "name": "swaggerize-restify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Adrian Zalewski",
     "email": "aazalewski@hotmail.com"
@@ -47,8 +47,7 @@
     "istanbul": "^0.2.3",
     "jshint": "^2.4.1",
     "restify": "^2.8.5",
-    "supertest": "^0.13.0",
-    "body-parser": "^1.7.0"
+    "supertest": "^0.13.0"
   },
   "scripts": {
     "test": "tape test/*.js",
