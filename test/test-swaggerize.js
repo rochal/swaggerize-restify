@@ -122,7 +122,7 @@ test('input validation', function (t) {
                     res.json({
                         id: 0,
                         name: 'Cat',
-                        tags: req.query['tags']
+                        tags: req.query.tags
                     });
                 },
                 $post: function (req, res) {
@@ -172,7 +172,7 @@ test('input validation', function (t) {
             t.strictEqual(response.statusCode, 200, '200 status.');
             t.ok(response.body.id === 0, 'id should exist and be zero');
             t.ok(response.body.name === 'fluffy', 'name should exist and equal "fluffy"');
-            t.ok(!response.body.extra, 'extra parameters are ignored and stripped')
+            t.ok(!response.body.extra, 'extra parameters are ignored and stripped');
         });
     });
 });

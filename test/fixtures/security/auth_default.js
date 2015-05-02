@@ -18,10 +18,10 @@ module.exports = function authorize(req, res, next) {
         }
         next(error);
     });
-}
+};
 
 function validate(req, callback) {
-    var auth = req.headers['authorize'];
+    var auth = req.headers.authorize;
 
     if (!auth) {
         callback(null, []);
